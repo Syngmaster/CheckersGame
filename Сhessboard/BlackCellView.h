@@ -11,7 +11,7 @@
 @interface BlackCellView : UIView
 
 @property (assign, nonatomic) NSInteger index;
-@property (assign, nonatomic) NSInteger checkColor;
+@property (assign, nonatomic) NSInteger checkerColor;
 @property (assign, nonatomic) BOOL occupiedCell;
 
 @property (strong, nonatomic) NSMutableArray *blackCellArray;

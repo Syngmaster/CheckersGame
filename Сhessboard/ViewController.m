@@ -30,14 +30,14 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     
     UITouch *touch = [touches anyObject];
-    [self.chessboard checkPickedWithTouch:touch andEvent:event inView:self.view];
+    [self.chessboard checkerPickedWithTouch:touch andEvent:event inView:self.view];
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     
     UITouch *touch = [touches anyObject];
 
-    [self.chessboard checkMovedWithTouch:touch];
+    [self.chessboard checkerMovedWithTouch:touch];
 }
 
 
@@ -45,7 +45,7 @@
     
     UITouch *touch = [touches anyObject];
     
-    [self.chessboard checkDroppedWithTouch:touch andEvent:event inView:self.view];
+    [self.chessboard checkerDroppedWithTouch:touch andEvent:event inView:self.view];
 
 }
 

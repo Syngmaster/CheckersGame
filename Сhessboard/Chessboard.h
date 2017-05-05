@@ -23,13 +23,13 @@
 @property (assign, nonatomic) CGPoint draggingViewOriginCoordinates;
 
 @property (strong, nonatomic) BlackCellView *blackCellView;
-@property (strong, nonatomic) NSMutableArray *checksArray;
+@property (strong, nonatomic) NSMutableArray *checkersArray;
 @property (strong, nonatomic) NSMutableArray *evenRanks;
 
 - (instancetype)initInView:(UIView *) view;
-- (void)checkPickedWithTouch:(UITouch *) touch andEvent:(UIEvent *) event inView:(UIView *) mainView;
+- (void)checkerPickedWithTouch:(UITouch *) touch andEvent:(UIEvent *) event inView:(UIView *) mainView;
 
-- (void)checkMovedWithTouch:(UITouch *) touch;
-- (void)checkDroppedWithTouch:(UITouch *) touch andEvent:(UIEvent *) event inView:(UIView *) mainView;
+- (void)checkerMovedWithTouch:(UITouch *) touch;
+- (void)checkerDroppedWithTouch:(UITouch *) touch andEvent:(UIEvent *) event inView:(UIView *) mainView;
 
 @end

@@ -10,19 +10,19 @@
 
 typedef NS_ENUM(NSInteger, UIViewTag){
     
-    UIViewTagBlackCheck,
-    UIViewTagWhiteCheck,
+    UIViewTagBlackChecker,
+    UIViewTagWhiteChecker,
     UIViewTagBoard,
     UIViewTagBlackCell
 
     
 };
 
-typedef NS_ENUM(NSInteger, CheckColorTag){
+typedef NS_ENUM(NSInteger, CheckerColorTag){
     
-    CheckColorTagBlack,
-    CheckColorTagWhite,
-    CheckColorTagNone
+    CheckerColorTagBlack,
+    CheckerColorTagWhite,
+    CheckerColorTagNone
     
     
 };
@@ -56,15 +56,15 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                 BlackCellView *blackCell = [[BlackCellView alloc] initWithFrame:CGRectMake(i*cellSize,j*cellSize, cellSize, cellSize)];
                 blackCell.index = index;
                 blackCell.tag = UIViewTagBlackCell;
-                blackCell.checkColor = CheckColorTagNone;
+                blackCell.checkerColor = CheckerColorTagNone;
                 index ++;
 
                 if ((j >= 0 && j < 3) || (j >= 5 && j < 8)) {
                     
                     blackCell.occupiedCell = YES;
                     blackCell.backgroundColor = [UIColor yellowColor];
-                    (j >= 0 && j < 3) ? (blackCell.checkColor = CheckColorTagBlack):
-                                        (blackCell.checkColor = CheckColorTagWhite);
+                    (j >= 0 && j < 3) ? (blackCell.checkerColor = CheckerColorTagBlack):
+                                        (blackCell.checkerColor = CheckerColorTagWhite);
                     
                 }
                 

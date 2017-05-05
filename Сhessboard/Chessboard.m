@@ -11,18 +11,18 @@
 
 typedef NS_ENUM(NSInteger, UIViewTag){
     
-    UIViewTagBlackCheck,
-    UIViewTagWhiteCheck,
+    UIViewTagBlackChecker,
+    UIViewTagWhiteChecker,
     UIViewTagBoard,
     UIViewTagBlackCell
     
 };
 
-typedef NS_ENUM(NSInteger, CheckColorTag){
+typedef NS_ENUM(NSInteger, CheckerColorTag){
     
-    CheckColorTagBlack,
-    CheckColorTagWhite,
-    CheckColorTagNone
+    CheckerColorTagBlack,
+    CheckerColorTagWhite,
+    CheckerColorTagNone
     
 };
 
@@ -30,14 +30,14 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
 
 @property (assign, nonatomic) CGFloat boardFrameSide;
 @property (assign, nonatomic) CGFloat boardSide;
-@property (assign, nonatomic) CGFloat checkSize;
+@property (assign, nonatomic) CGFloat checkerSize;
 
-@property (assign, nonatomic) CGFloat checkOffset;
+@property (assign, nonatomic) CGFloat checkerOffset;
 @property (assign, nonatomic) CGPoint touchOffset;
 
-@property (strong, nonatomic) BlackCellView *beatedCheck1;
-@property (strong, nonatomic) BlackCellView *beatedCheck2;
-@property (strong, nonatomic) BlackCellView *cellWithCheck;
+@property (strong, nonatomic) BlackCellView *beatedChecker1;
+@property (strong, nonatomic) BlackCellView *beatedChecker2;
+@property (strong, nonatomic) BlackCellView *cellWithChecker;
 
 @end
 
@@ -66,14 +66,14 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
     
     //set up for checks
     
-    CGFloat checkSize = cellSideSize*0.65;
-    CGFloat checkOffset = cellSideSize*0.35/2;
+    CGFloat checkerSize = cellSideSize*0.65;
+    CGFloat checkerOffset = cellSideSize*0.35/2;
     
     self.boardFrameSide = boardFrameSide;
     self.boardSide = boardSide;
     self.cellSideSize = cellSideSize;
-    self.checkSize = checkSize;
-    self.checkOffset = checkOffset;
+    self.checkerSize = checkerSize;
+    self.checkerOffset = checkerOffset;
     
     UIView *boardViewOffset = [[UIView alloc] initWithFrame:CGRectMake(0, 0, boardFrameSide, boardFrameSide)];
     UIView *boardView = [[UIView alloc] initWithFrame:CGRectMake(view.bounds.size.width*0.05, view.bounds.size.width*0.05, boardSide, boardSide)];
@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
     
     self.possibleMove = [NSMutableArray array];
     
-    self.checksArray = [NSMutableArray array];
+    self.checkersArray = [NSMutableArray array];
     
     self.evenRanks = [self createEvenRanksArray];
 
@@ -114,7 +114,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
     self.blackCellView = blackCellView;
     [self.blackCellView createBlackCellWith:self.cellSideSize inView:self.boardView];
 
-    [self createChecksInView:view];
+    [self createCheckersInView:view];
     
     [view addSubview:self.boardViewOffset];
     [view addSubview:self.boardView];
@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
     return evenRanks;
 }
 
-- (void)createChecksInView:(UIView *) view {
+- (void)createCheckersInView:(UIView *) view {
     
     //black checks player
     
@@ -146,13 +146,13 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
             
             if ((i%2 == 0 && j%2 == 0) || (i%2 != 0 && j%2 != 0)) {
                 
-                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.checkOffset+i*self.cellSideSize,self.checkOffset+j*self.cellSideSize,self.checkSize, self.checkSize)];
-                view.tag = UIViewTagBlackCheck;
+                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.checkerOffset+i*self.cellSideSize,self.checkerOffset+j*self.cellSideSize,self.checkerSize, self.checkerSize)];
+                view.tag = UIViewTagBlackChecker;
                 view.backgroundColor = [UIColor blackColor];
                 view.layer.borderWidth = 0.2;
-                view.layer.cornerRadius = self.checkSize/2;
+                view.layer.cornerRadius = self.checkerSize/2;
                 view.layer.borderColor = [UIColor blackColor].CGColor;
-                [self.checksArray addObject:view];
+                [self.checkersArray addObject:view];
                 [self.boardView addSubview:view];
                 
             }
@@ -166,13 +166,13 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
      
             if ((i%2 == 0 && j%2 == 0) || (i%2 != 0 && j%2 != 0)) {
      
-                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.checkOffset+i*self.cellSideSize,self.checkOffset+j*self.cellSideSize, self.checkSize, self.checkSize)];
-                view.tag = UIViewTagWhiteCheck;
+                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.checkerOffset+i*self.cellSideSize,self.checkerOffset+j*self.cellSideSize, self.checkerSize, self.checkerSize)];
+                view.tag = UIViewTagWhiteChecker;
                 view.backgroundColor = [UIColor whiteColor];
                 view.layer.borderWidth = 0.2;
-                view.layer.cornerRadius = self.checkSize/2;
+                view.layer.cornerRadius = self.checkerSize/2;
                 view.layer.borderColor = [UIColor blackColor].CGColor;
-                [self.checksArray addObject:view];
+                [self.checkersArray addObject:view];
                 [self.boardView addSubview:view];
             }
          }
@@ -182,27 +182,27 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
 
 #pragma mark - Touch methods
 
-- (void)checkPickedWithTouch:(UITouch *) touch andEvent:(UIEvent *) event inView:(UIView *) mainView {
+- (void)checkerPickedWithTouch:(UITouch *) touch andEvent:(UIEvent *) event inView:(UIView *) mainView {
     
     CGPoint pointOnMainView = [touch locationInView:mainView];
     CGPoint pointOnBoardView = [touch locationInView:self.boardView];
     
-    UIView *checkView = [mainView hitTest:pointOnMainView withEvent:event];
+    UIView *checkerView = [mainView hitTest:pointOnMainView withEvent:event];
     
-    if (![checkView isEqual:self.boardView] && ![checkView isEqual:mainView]) {
+    if (![checkerView isEqual:self.boardView] && ![checkerView isEqual:mainView]) {
         
-        if (checkView.tag == UIViewTagBlackCheck || checkView.tag == UIViewTagWhiteCheck) {
+        if (checkerView.tag == UIViewTagBlackChecker || checkerView.tag == UIViewTagWhiteChecker) {
             
-            self.draggingView = checkView;
-            self.draggingViewOriginCoordinates = CGPointMake(CGRectGetMidX(checkView.frame), CGRectGetMidY(checkView.frame));
+            self.draggingView = checkerView;
+            self.draggingViewOriginCoordinates = CGPointMake(CGRectGetMidX(checkerView.frame), CGRectGetMidY(checkerView.frame));
             [mainView bringSubviewToFront:self.draggingView];
             
             CGPoint touchPoint = [touch locationInView:self.draggingView];
             
             self.touchOffset = CGPointMake(CGRectGetMidX(self.draggingView.bounds) - touchPoint.x, CGRectGetMidY(self.draggingView.bounds) - touchPoint.y);
             
-            [self getPossibleMovesOfView:checkView containingPoint:pointOnBoardView];
-            self.possibleMove = [self updatePossibleMoves:self.possibleMove ofCheck:checkView];
+            [self getPossibleMovesOfView:checkerView containingPoint:pointOnBoardView];
+            self.possibleMove = [self updatePossibleMoves:self.possibleMove ofChecker:checkerView];
             
         } else {
             
@@ -212,7 +212,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
     }
 }
 
-- (void)checkMovedWithTouch:(UITouch *) touch {
+- (void)checkerMovedWithTouch:(UITouch *) touch {
     
     if (self.draggingView) {
         
@@ -225,22 +225,22 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
     }    
 }
 
-- (void)checkDroppedWithTouch:(UITouch *) touch andEvent:(UIEvent *) event inView:(UIView *) mainView {
+- (void)checkerDroppedWithTouch:(UITouch *) touch andEvent:(UIEvent *) event inView:(UIView *) mainView {
     
     CGPoint pointOnBoardView = [touch locationInView:self.boardView];
     CGPoint pointOnMainView = [touch locationInView:mainView];
     
     CGPoint newCoordinates = self.draggingViewOriginCoordinates;
 
-    UIView *checkView = [mainView hitTest:pointOnMainView withEvent:event];
+    UIView *checkerView = [mainView hitTest:pointOnMainView withEvent:event];
     
     if (self.draggingView) {
         
-        newCoordinates = [self updateCheckCoordinate:checkView whenTouchEndedInPoint:pointOnBoardView];
+        newCoordinates = [self updateCheckerCoordinate:checkerView whenTouchEndedInPoint:pointOnBoardView];
         
         if (!CGPointEqualToPoint(self.draggingView.center, newCoordinates)) {
             
-            [self setCheckCoordinates: checkView backToOrigin:self.draggingViewOriginCoordinates];
+            [self setCheckerCoordinates: checkerView backToOrigin:self.draggingViewOriginCoordinates];
             
         } else {
             
@@ -249,8 +249,8 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                 if (CGRectContainsPoint(view.frame, pointOnBoardView)) {
                     
                     view.occupiedCell = YES;
-                    (checkView.tag == UIViewTagBlackCheck) ? (view.checkColor = CheckColorTagBlack):
-                    (view.checkColor = CheckColorTagWhite);
+                    (checkerView.tag == UIViewTagBlackChecker) ? (view.checkerColor = CheckerColorTagBlack):
+                    (view.checkerColor = CheckerColorTagWhite);
                     view.backgroundColor = [UIColor yellowColor];
                 }
             }
@@ -258,7 +258,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
         
         if (!CGPointEqualToPoint(self.draggingViewOriginCoordinates, newCoordinates)) {
             
-            [self removeBeatedCheckWithPoint:pointOnBoardView];
+            [self removeBeatedCheckerWithPoint:pointOnBoardView];
             
         }
     }
@@ -268,21 +268,21 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
 
 #pragma mark - Methods when touch began
 
-- (void)getPossibleMovesOfView:(UIView *) checkView containingPoint:(CGPoint) point {
+- (void)getPossibleMovesOfView:(UIView *) checkerView containingPoint:(CGPoint) point {
     
     for (BlackCellView *view in self.blackCellView.blackCellArray) {
         
         if (CGRectContainsPoint(view.frame, point)) {
-            self.cellWithCheck = view;
+            self.cellWithChecker = view;
             view.occupiedCell = NO;
-            view.checkColor = CheckColorTagNone;
+            view.checkerColor = CheckerColorTagNone;
             view.backgroundColor = [UIColor blackColor];
-            self.possibleMove = [self movesOfCheck:checkView lyingOnCell:view];
+            self.possibleMove = [self movesOfChecker:checkerView lyingOnCell:view];
         }
     }
 }
 
-- (NSMutableArray *)movesOfCheck:(UIView *) checkView lyingOnCell:(BlackCellView *) viewCell {
+- (NSMutableArray *)movesOfChecker:(UIView *) checkerView lyingOnCell:(BlackCellView *) viewCell {
     
     NSInteger index = viewCell.index;
     
@@ -292,13 +292,13 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
         
         if (index % 8 == 0) {
             
-            (checkView.tag == UIViewTagBlackCheck)?
+            (checkerView.tag == UIViewTagBlackChecker)?
             ([array addObject:[self.blackCellView.blackCellArray objectAtIndex:index+4]]):
             ([array addObject:[self.blackCellView.blackCellArray objectAtIndex:index-4]]);
             
         } else {
             
-            if (checkView.tag == UIViewTagBlackCheck) {
+            if (checkerView.tag == UIViewTagBlackChecker) {
                 [array addObject:[self.blackCellView.blackCellArray objectAtIndex:index+3]];
                 [array addObject:[self.blackCellView.blackCellArray objectAtIndex:index+4]];
             } else {
@@ -312,13 +312,13 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
         
         if (index == 7 || index == 15 || index == 23 || index == 31) {
             
-            (checkView.tag == UIViewTagBlackCheck)?
+            (checkerView.tag == UIViewTagBlackChecker)?
             ([array addObject:[self.blackCellView.blackCellArray objectAtIndex:index+4]]):
             ([array addObject:[self.blackCellView.blackCellArray objectAtIndex:index-4]]);
             
         } else {
             
-            if (checkView.tag == UIViewTagBlackCheck) {
+            if (checkerView.tag == UIViewTagBlackChecker) {
                 [array addObject:[self.blackCellView.blackCellArray objectAtIndex:index+4]];
                 [array addObject:[self.blackCellView.blackCellArray objectAtIndex:index+5]];
             } else {
@@ -334,14 +334,14 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
 
 #pragma mark - Update moves
 
-/*- (NSMutableArray *)updatePossibleMovesOfCheck:(UIView *) checkView lyingOnView:(BlackCellView *) cellWithCheck fromArray:(NSMutableArray *) beatMoves {
+/*- (NSMutableArray *)updatePossibleMovesOfChecker:(UIView *) checkerView lyingOnView:(BlackCellView *) cellWithChecker fromArray:(NSMutableArray *) beatMoves {
     
     NSMutableArray *array = [NSMutableArray array];
     return array;
     
 }
 
-- (NSInteger)getNewIndexForBeatMove:(BlackCellView *) beatMove ofCheck:(UIView *) checkView lyingOnView:(BlackCellView *) cellWithCheck {
+- (NSInteger)getNewIndexForBeatMove:(BlackCellView *) beatMove ofChecker:(UIView *) checkerView lyingOnView:(BlackCellView *) cellWithChecker {
 
     NSInteger newIndex = 0;
     return newIndex;
@@ -349,26 +349,26 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
 
 
 
-- (NSMutableArray *)updatePossibleMoves:(NSMutableArray *) possibleMoves ofCheck:(UIView *) checkView {
+- (NSMutableArray *)updatePossibleMoves:(NSMutableArray *) possibleMoves ofChecker:(UIView *) checkerView {
     
     NSMutableArray *array = [NSMutableArray array];
     
-    self.beatedCheck1 = nil;
-    self.beatedCheck2 = nil;
+    self.beatedChecker1 = nil;
+    self.beatedChecker2 = nil;
     
     //NSLog(@"moves - %i", (int)[possibleMoves count]);
     
     NSMutableArray *beatMoves = [NSMutableArray array];
     
-    //****** in case when a check has 2 both left and right moves *******
+    //****** in case when a checker has 2 both left and right moves *******
     
     if ([possibleMoves count] == 2) {
         
         // checking if any of possible moves can be a beat move
         
-        beatMoves = [self getBeatMovesOfCheck:checkView fromArray:possibleMoves];
+        beatMoves = [self getBeatMovesOfChecker:checkerView fromArray:possibleMoves];
         
-        //NSLog(@"index of cell with check %i", (int) self.cellWithCheck.index);
+        //NSLog(@"index of cell with checker %i", (int) self.cellWithChecker.index);
         
         NSInteger newIndex1 = 0;
         NSInteger newIndex2 = 0;
@@ -385,15 +385,15 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
             beat1 = [self verifyIfViewIsNil:beat1];
             beat2 = [self verifyIfViewIsNil:beat2];
             
-            if ((self.cellWithCheck.index >= 0 && self.cellWithCheck.index <= 3)||(self.cellWithCheck.index >= 8 && self.cellWithCheck.index <= 11)||(self.cellWithCheck.index >= 16 && self.cellWithCheck.index <= 19)||(self.cellWithCheck.index >= 24 && self.cellWithCheck.index <= 27)) {
+            if ((self.cellWithChecker.index >= 0 && self.cellWithChecker.index <= 3)||(self.cellWithChecker.index >= 8 && self.cellWithChecker.index <= 11)||(self.cellWithChecker.index >= 16 && self.cellWithChecker.index <= 19)||(self.cellWithChecker.index >= 24 && self.cellWithChecker.index <= 27)) {
                 
-                if (checkView.tag == UIViewTagBlackCheck) {
+                if (checkerView.tag == UIViewTagBlackChecker) {
                     
                     if (beat1 == nil) {
                         
                         newIndex2 = beat2.index + 5;
                         
-                        self.beatedCheck2 = beat2;
+                        self.beatedChecker2 = beat2;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex2]];
                         
@@ -403,7 +403,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                         
                         NSLog(@"beat1 method : %i", (int)newIndex1);
 
-                        self.beatedCheck1 = beat1;
+                        self.beatedChecker1 = beat1;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         
@@ -421,8 +421,8 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                             
                         } else {
                             
-                            self.beatedCheck1 = beat1;
-                            self.beatedCheck2 = beat2;
+                            self.beatedChecker1 = beat1;
+                            self.beatedChecker2 = beat2;
                             
                             [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                             [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex2]];
@@ -436,7 +436,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                         
                         newIndex2 = beat2.index - 4;
                         
-                        self.beatedCheck2 = beat2;
+                        self.beatedChecker2 = beat2;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex2]];
                         
@@ -447,7 +447,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                         NSLog(@"beat1 method : %i", (int)newIndex1);
 
                         
-                        self.beatedCheck1 = beat1;
+                        self.beatedChecker1 = beat1;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         
@@ -459,8 +459,8 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                         NSLog(@"Non nil method : %i", (int)newIndex1);
 
                         
-                        self.beatedCheck1 = beat1;
-                        self.beatedCheck2 = beat2;
+                        self.beatedChecker1 = beat1;
+                        self.beatedChecker2 = beat2;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex2]];
@@ -471,14 +471,14 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                 
             } else {
                 
-                if (checkView.tag == UIViewTagBlackCheck) {
+                if (checkerView.tag == UIViewTagBlackChecker) {
                     
                     
                     if (beat1 == nil) {
                         
                         newIndex2 = beat2.index + 4;
                         
-                        self.beatedCheck2 = beat2;
+                        self.beatedChecker2 = beat2;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex2]];
                         
@@ -488,7 +488,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                         NSLog(@"beat1 method : %i", (int)newIndex1);
 
                         
-                        self.beatedCheck1 = beat1;
+                        self.beatedChecker1 = beat1;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         
@@ -500,8 +500,8 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                         NSLog(@"Non nil method : %i", (int)newIndex1);
 
                         
-                        self.beatedCheck1 = beat1;
-                        self.beatedCheck2 = beat2;
+                        self.beatedChecker1 = beat1;
+                        self.beatedChecker2 = beat2;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex2]];
@@ -512,7 +512,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                     if (beat1 == nil) {
                         newIndex2 = beat2.index - 5;
                         
-                        self.beatedCheck2 = beat2;
+                        self.beatedChecker2 = beat2;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex2]];
                         
@@ -523,7 +523,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                         NSLog(@"beat1 method : %i", (int)newIndex1);
 
                         
-                        self.beatedCheck1 = beat1;
+                        self.beatedChecker1 = beat1;
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         
@@ -540,8 +540,8 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                             
                         } else {
                             
-                            self.beatedCheck1 = beat1;
-                            self.beatedCheck2 = beat2;
+                            self.beatedChecker1 = beat1;
+                            self.beatedChecker2 = beat2;
                             
                             [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                             [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex2]];
@@ -560,42 +560,42 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
             
             if (beat1 != nil) {
                 
-                if ((self.cellWithCheck.index >=0 && self.cellWithCheck.index <= 3)||(self.cellWithCheck.index >= 8 && self.cellWithCheck.index <= 11)||(self.cellWithCheck.index >= 16 && self.cellWithCheck.index <= 19)||(self.cellWithCheck.index >= 24 && self.cellWithCheck.index <= 27)) {
+                if ((self.cellWithChecker.index >=0 && self.cellWithChecker.index <= 3)||(self.cellWithChecker.index >= 8 && self.cellWithChecker.index <= 11)||(self.cellWithChecker.index >= 16 && self.cellWithChecker.index <= 19)||(self.cellWithChecker.index >= 24 && self.cellWithChecker.index <= 27)) {
                     
-                    if (checkView.tag == UIViewTagBlackCheck) {
-                        ((beat1.index - self.cellWithCheck.index) == 3)?(newIndex1 = beat1.index + 4):
+                    if (checkerView.tag == UIViewTagBlackChecker) {
+                        ((beat1.index - self.cellWithChecker.index) == 3)?(newIndex1 = beat1.index + 4):
                         (newIndex1 = beat1.index + 5);
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         
-                        self.beatedCheck1 = beat1;
+                        self.beatedChecker1 = beat1;
                         
                     } else {
-                        ((self.cellWithCheck.index - beat1.index) == 5)?(newIndex1 = beat1.index - 4):
+                        ((self.cellWithChecker.index - beat1.index) == 5)?(newIndex1 = beat1.index - 4):
                         (newIndex1 = beat1.index - 3);
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         
-                        self.beatedCheck1 = beat1;
+                        self.beatedChecker1 = beat1;
                     }
                     
                 } else {
                     
                     
-                    if (checkView.tag == UIViewTagBlackCheck) {
-                        ((beat1.index - self.cellWithCheck.index) == 4)?(newIndex1 = beat1.index + 3):
+                    if (checkerView.tag == UIViewTagBlackChecker) {
+                        ((beat1.index - self.cellWithChecker.index) == 4)?(newIndex1 = beat1.index + 3):
                         (newIndex1 = beat1.index + 4);
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         
-                        self.beatedCheck1 = beat1;
+                        self.beatedChecker1 = beat1;
                         
                     } else {
-                        ((self.cellWithCheck.index - beat1.index) == 4)?(newIndex1 = beat1.index - 5):
+                        ((self.cellWithChecker.index - beat1.index) == 4)?(newIndex1 = beat1.index - 5):
                         (newIndex1 = beat1.index - 4);
                         
                         [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                         
-                        self.beatedCheck1 = beat1;
+                        self.beatedChecker1 = beat1;
                     }
                     
                     
@@ -618,56 +618,56 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
         
     } else if ([possibleMoves count] == 1) {
         
-        //****** in case when a check has either left or right move depending on its position to left or right border of the chessboard ******
+        //****** in case when a checker has either left or right move depending on its position to left or right border of the chessboard ******
         
-        beatMoves = [self getBeatMovesOfCheck:checkView fromArray:possibleMoves];
+        beatMoves = [self getBeatMovesOfChecker:checkerView fromArray:possibleMoves];
         
         BlackCellView *moveView1 = possibleMoves[0];
         BlackCellView *beat1 = [[BlackCellView alloc] init];
         NSInteger newIndex1 = 0;
         
-        if ((moveView1.checkColor == CheckColorTagWhite && checkView.tag == UIViewTagBlackCheck)||(moveView1.checkColor == CheckColorTagBlack && checkView.tag == UIViewTagWhiteCheck)) {
+        if ((moveView1.checkerColor == CheckerColorTagWhite && checkerView.tag == UIViewTagBlackChecker)||(moveView1.checkerColor == CheckerColorTagBlack && checkerView.tag == UIViewTagWhiteChecker)) {
             
             beat1 = moveView1;
             
-            if ((self.cellWithCheck.index >=0 && self.cellWithCheck.index <= 3)||(self.cellWithCheck.index >= 8 && self.cellWithCheck.index <= 11)||(self.cellWithCheck.index >= 16 && self.cellWithCheck.index <= 19)) {
+            if ((self.cellWithChecker.index >=0 && self.cellWithChecker.index <= 3)||(self.cellWithChecker.index >= 8 && self.cellWithChecker.index <= 11)||(self.cellWithChecker.index >= 16 && self.cellWithChecker.index <= 19)) {
                 
-                if (checkView.tag == UIViewTagBlackCheck) {
-                    ((beat1.index - self.cellWithCheck.index) == 3)?(newIndex1 = beat1.index + 4):
+                if (checkerView.tag == UIViewTagBlackChecker) {
+                    ((beat1.index - self.cellWithChecker.index) == 3)?(newIndex1 = beat1.index + 4):
                     (newIndex1 = beat1.index + 5);
                     
                     [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                     
-                    self.beatedCheck1 = beat1;
+                    self.beatedChecker1 = beat1;
                     
                 } else {
                     
-                    ((self.cellWithCheck.index - beat1.index) == 5)?(newIndex1 = beat1.index - 4):
+                    ((self.cellWithChecker.index - beat1.index) == 5)?(newIndex1 = beat1.index - 4):
                     (newIndex1 = beat1.index - 3);
                     
                     [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                     
-                    self.beatedCheck1 = beat1;
+                    self.beatedChecker1 = beat1;
                     
                 }
                 
             } else {
                 
-                if (checkView.tag == UIViewTagBlackCheck) {
-                    ((beat1.index - self.cellWithCheck.index) == 4)?(newIndex1 = beat1.index + 3):
+                if (checkerView.tag == UIViewTagBlackChecker) {
+                    ((beat1.index - self.cellWithChecker.index) == 4)?(newIndex1 = beat1.index + 3):
                     (newIndex1 = beat1.index + 4);
                     
                     [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                     
-                    self.beatedCheck1 = beat1;
+                    self.beatedChecker1 = beat1;
                     
                 } else {
-                    ((self.cellWithCheck.index - beat1.index) == 4)?(newIndex1 = beat1.index - 5):
+                    ((self.cellWithChecker.index - beat1.index) == 4)?(newIndex1 = beat1.index - 5):
                     (newIndex1 = beat1.index - 4);
                     
                     [array addObject:[self.blackCellView.blackCellArray objectAtIndex:newIndex1]];
                     
-                    self.beatedCheck1 = beat1;
+                    self.beatedChecker1 = beat1;
                 }
             }
             //NSLog(@"beat moves - 1");
@@ -691,13 +691,13 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
     
 }
 
-- (NSMutableArray *)getBeatMovesOfCheck:(UIView *) checkView fromArray:(NSMutableArray *) possibleMoves {
+- (NSMutableArray *)getBeatMovesOfChecker:(UIView *) checkerView fromArray:(NSMutableArray *) possibleMoves {
     
     NSMutableArray *array = [NSMutableArray array];
     
     for (BlackCellView *cellView in possibleMoves) {
         
-        if ((checkView.tag == UIViewTagBlackCheck && cellView.checkColor == CheckColorTagWhite)||(checkView.tag == UIViewTagWhiteCheck && cellView.checkColor == CheckColorTagBlack)) {
+        if ((checkerView.tag == UIViewTagBlackChecker && cellView.checkerColor == CheckerColorTagWhite)||(checkerView.tag == UIViewTagWhiteChecker && cellView.checkerColor == CheckerColorTagBlack)) {
             
             [array addObject:cellView];
         }
@@ -725,11 +725,11 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
 #pragma mark - Methods when touch ended
 
 
-- (CGPoint)updateCheckCoordinate:(UIView *) checkView whenTouchEndedInPoint:(CGPoint) pointOnBoardView {
+- (CGPoint)updateCheckerCoordinate:(UIView *) checkerView whenTouchEndedInPoint:(CGPoint) pointOnBoardView {
     
     CGPoint newCoordinates = self.draggingViewOriginCoordinates;
     
-    //update coordinates if check landed on one of possibleMove views
+    //update coordinates if checker landed on one of possibleMove views
     
     for (BlackCellView *view in self.possibleMove) {
         
@@ -742,8 +742,8 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
                 self.draggingView.center = newCoordinates;
                 
                 view.occupiedCell = YES;
-                (checkView.tag == UIViewTagBlackCheck) ? (view.checkColor = CheckColorTagBlack):
-                (view.checkColor = CheckColorTagWhite);
+                (checkerView.tag == UIViewTagBlackChecker) ? (view.checkerColor = CheckerColorTagBlack):
+                (view.checkerColor = CheckerColorTagWhite);
                 view.backgroundColor = [UIColor yellowColor];
                 
             }
@@ -754,7 +754,7 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
 }
 
 
-- (void)setCheckCoordinates:(UIView *) checkView backToOrigin:(CGPoint) originCoordinates {
+- (void)setCheckerCoordinates:(UIView *) checkerView backToOrigin:(CGPoint) originCoordinates {
     
     self.draggingView.center = originCoordinates;
     
@@ -763,15 +763,15 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
         if (CGRectContainsPoint(view.frame, self.draggingViewOriginCoordinates)) {
             
             view.occupiedCell = YES;
-            (checkView.tag == UIViewTagBlackCheck) ? (view.checkColor = CheckColorTagBlack):
-            (view.checkColor = CheckColorTagWhite);
+            (checkerView.tag == UIViewTagBlackChecker) ? (view.checkerColor = CheckerColorTagBlack):
+            (view.checkerColor = CheckerColorTagWhite);
             view.backgroundColor = [UIColor yellowColor];
         }
     }
 }
 
 
-- (void)removeBeatedCheckWithPoint:(CGPoint) pointOnBoardView {
+- (void)removeBeatedCheckerWithPoint:(CGPoint) pointOnBoardView {
     
     BlackCellView *view1;
     BlackCellView *view2;
@@ -783,11 +783,11 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
         
     } else {
         
-        if (self.beatedCheck1 == nil) {
+        if (self.beatedChecker1 == nil) {
             
             view2 = self.possibleMove[0];
             
-        } else if (self.beatedCheck2 == nil) {
+        } else if (self.beatedChecker2 == nil) {
             
             view1 = self.possibleMove[0];
             
@@ -797,27 +797,27 @@ typedef NS_ENUM(NSInteger, CheckColorTag){
     
     if (CGRectContainsPoint(view1.frame, pointOnBoardView)) {
         
-        for (UIView *checkViews in self.checksArray) {
+        for (UIView *checkerViews in self.checkersArray) {
             
-            if (CGRectContainsRect(self.beatedCheck1.frame, checkViews.frame)) {
+            if (CGRectContainsRect(self.beatedChecker1.frame, checkerViews.frame)) {
                 
-                self.beatedCheck1.occupiedCell = NO;
-                self.beatedCheck1.backgroundColor = [UIColor blackColor];
-                [checkViews removeFromSuperview];
+                self.beatedChecker1.occupiedCell = NO;
+                self.beatedChecker1.backgroundColor = [UIColor blackColor];
+                [checkerViews removeFromSuperview];
                 
             }
         }
         
     } else if (CGRectContainsPoint(view2.frame, pointOnBoardView)) {
         
-        for (UIView *checkViews in self.checksArray) {
+        for (UIView *checkerViews in self.checkersArray) {
             
-            if (CGRectContainsRect(self.beatedCheck2.frame, checkViews.frame)) {
+            if (CGRectContainsRect(self.beatedChecker2.frame, checkerViews.frame)) {
                 
-                self.beatedCheck2.occupiedCell = NO;
-                self.beatedCheck2.backgroundColor = [UIColor blackColor];
+                self.beatedChecker2.occupiedCell = NO;
+                self.beatedChecker2.backgroundColor = [UIColor blackColor];
                 
-                [checkViews removeFromSuperview];
+                [checkerViews removeFromSuperview];
             }
         }
     }

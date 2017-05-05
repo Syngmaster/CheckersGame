@@ -13,6 +13,8 @@
 		DC1A8BCA1EA53AC000E0DEC2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC1A8BC81EA53AC000E0DEC2 /* Main.storyboard */; };
 		DC1A8BCC1EA53AC000E0DEC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC1A8BCB1EA53AC000E0DEC2 /* Assets.xcassets */; };
 		DC1A8BCF1EA53AC000E0DEC2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC1A8BCD1EA53AC000E0DEC2 /* LaunchScreen.storyboard */; };
+		DC29BAC31EB4E50B00AE3D2D /* Chessboard.m in Sources */ = {isa = PBXBuildFile; fileRef = DC29BAC21EB4E50B00AE3D2D /* Chessboard.m */; };
+		DC29BAC91EB7B4BF00AE3D2D /* BlackCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = DC29BAC81EB7B4BF00AE3D2D /* BlackCellView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,10 @@
 		DC1A8BCB1EA53AC000E0DEC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DC1A8BCE1EA53AC000E0DEC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DC1A8BD01EA53AC000E0DEC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC29BAC11EB4E50B00AE3D2D /* Chessboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chessboard.h; sourceTree = "<group>"; };
+		DC29BAC21EB4E50B00AE3D2D /* Chessboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chessboard.m; sourceTree = "<group>"; };
+		DC29BAC71EB7B4BF00AE3D2D /* BlackCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlackCellView.h; sourceTree = "<group>"; };
+		DC29BAC81EB7B4BF00AE3D2D /* BlackCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlackCellView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +66,10 @@
 			children = (
 				DC1A8BC21EA53AC000E0DEC2 /* AppDelegate.h */,
 				DC1A8BC31EA53AC000E0DEC2 /* AppDelegate.m */,
+				DC29BAC71EB7B4BF00AE3D2D /* BlackCellView.h */,
+				DC29BAC81EB7B4BF00AE3D2D /* BlackCellView.m */,
+				DC29BAC11EB4E50B00AE3D2D /* Chessboard.h */,
+				DC29BAC21EB4E50B00AE3D2D /* Chessboard.m */,
 				DC1A8BC51EA53AC000E0DEC2 /* ViewController.h */,
 				DC1A8BC61EA53AC000E0DEC2 /* ViewController.m */,
 				DC1A8BC81EA53AC000E0DEC2 /* Main.storyboard */,
@@ -151,7 +161,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC29BAC91EB7B4BF00AE3D2D /* BlackCellView.m in Sources */,
 				DC1A8BC71EA53AC000E0DEC2 /* ViewController.m in Sources */,
+				DC29BAC31EB4E50B00AE3D2D /* Chessboard.m in Sources */,
 				DC1A8BC41EA53AC000E0DEC2 /* AppDelegate.m in Sources */,
 				DC1A8BC11EA53AC000E0DEC2 /* main.m in Sources */,
 			);
@@ -312,6 +324,7 @@
 				DC1A8BD51EA53AC000E0DEC2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
